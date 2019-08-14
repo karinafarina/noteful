@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import { Route } from 'react-router-dom';
+import dummyStore from './dummy-store';
+import Header from './Header/Header';
 import './App.css';
+import FolderMain from './FolderMain/FolderMain';
+import FolderSidebar from './FolderSidebar/FolderSidebar';
+import MainMain from './MainMain/MainMain';
+import MainSidebar from './MainSidebar/MainSidebar';
+import NoteMain from './NoteMain/NoteMain'
+import NoteSidebar from './NoteSidebar/NoteSidebar';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props) 
+    this.state = {
+      folders: [],
+      notes: []
+    }
+  };
+
+  componentDidMount() {
+    this.setState( {
+      folders: dummyStore.folders,
+      notes: dummyStore.notes,
+    })
+  }
+  render() {
+    return (
+      <main className='App' >
+        <Header />
+        <Route exact path='/' component={MainSidebar} />
+        <Route path='/folder' component={FolderSidebar} />
+        <Route path='/note' component={NoteSidebar} />
+        
+        <Route exact path='/' render={(routerProps) => 
+          <MainMain notes={this.state.notes}/>
+          } />
+        <Route path='/folder' component={FolderMain} />
+        <Route path='/note' component={NoteMain} />
+      </main>
+    );
+  }
 }
+  
+ 
 
 export default App;

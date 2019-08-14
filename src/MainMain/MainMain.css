@@ -1,0 +1,9 @@
+.main-main {
+  width: 66%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+li {
+  list-style-type: none;
+}
