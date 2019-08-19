@@ -25,7 +25,14 @@ class App extends Component {
 
   render() {
     const { folders, notes } = this.state;
-    
+    // const getFolderForNote = (notes= [], noteId) => 
+    //   {
+    //     notes.forEach((note) => {
+    //       if(note.id === noteId) {
+    //         return note.folderId;
+    //       }
+    //     });
+    //   }
     const findFolder = (folders = [], folderId) =>
       folders.find(folder => folder.id === folderId)
 
@@ -43,7 +50,8 @@ class App extends Component {
 
     return (
       <main className='App' >
-        {['/', '/folder/:folderId'].map(path => (
+        <Header />
+        {['/', '/folders/:folderId'].map(path => (
           <Route
             exact
             key={path}
@@ -60,26 +68,48 @@ class App extends Component {
           />
         )
         )}
-        <Header />
+        
+        <Route
+          path='/notes/:noteId'
+          render={routeProps => {
+
+            const { noteId } = routeProps.match.params;
+            console.log(noteId);
+            const note = findNote(notes, noteId) || { content: '' };
+            console.log(note);
+            const folder = findFolder(folders, note.folderId);
+
+            return (
+              <FolderView
+                {...routeProps}
+                folder={folder}
+                note={note}
+              />
+            )
+          }}
+        />
+        
         <Route 
-          path='/note/:noteId'
+          path='/notes/:noteId'
           render={routeProps => {
             
             const { noteId } = routeProps.match.params;
             console.log(noteId);
-            const note = findNote(notes, noteId || {});
+            const note = findNote(notes, noteId) || {content: ''};
+            console.log(note);
             const folder = findFolder(folders, note.folderId);
             
             return (
-            <NoteList
+            <NoteView
               {...routeProps}
               folder={folder}
+              note={note}
             />
             )
           }}
         />
         {/* Map through these two options, same for both */}
-        {['/', '/folder/:folderId'].map(path => (
+        {['/', '/folders/:folderId'].map(path => (
           <Route
             exact
             key={path}
@@ -89,15 +119,15 @@ class App extends Component {
               console.log( 'folderid', folderId);
               const notesForFolder = getNotesForFolder(notes, folderId);
               return (
-                
+                <NoteList
+                  {...routeProps}
+                  notes={notesForFolder}
+                />
               )
             }}
-        )}
-        
-        
-        <Route path='/note/:noteId' component={FolderView} />{/* GRAB NOTE ID FROM THE PATH */}
-        <Route path='/note/:noteId' component={NoteView} />{/* GRAB NOTE ID FROM THE PATH */}
-
+           />
+        ))
+        }
       </main>
     );
   }

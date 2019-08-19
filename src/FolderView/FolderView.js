@@ -1,10 +1,16 @@
 import React from 'react';
 import './FolderView.css';
 
-function FolderView() {
+function FolderView(props) {
   return (
     <div className="note-sidebar">
-    </div>
+        <button>Back</button>
+        {props.folder && (
+          <h3 className='note-sidebar__folder-name'>
+            {props.folder.name}
+          </h3>
+        )}
+      </div>
   )
 }
 

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 import './NoteList.css';
 
 class NoteList extends Component {
@@ -10,7 +11,11 @@ class NoteList extends Component {
         <ul>
           {this.props.notes.map(note =>
             <li key={note.id}>
-              <div>{note.name}</div>
+              <div>
+                <Link to={`/notes/${note.id}`}>
+                  {note.name}
+                </Link>
+              </div>
               <div>{note.modified}</div>
             </li>
           )}
