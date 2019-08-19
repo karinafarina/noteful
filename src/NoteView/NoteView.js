@@ -1,13 +1,13 @@
 import React from 'react'
 //import { Link } from './node_modules/react-router-dom';
-import './NoteMain.css';
+import './NoteView.css';
 
-function NoteMain() {
+function NoteView() {
   return (
-    <div className="note-main">
+    <div className="note-view">
       
     </div>
   )
 }
 
-export default NoteMain;
+export default NoteView;

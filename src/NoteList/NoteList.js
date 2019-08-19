@@ -1,16 +1,17 @@
 import React, {Component} from 'react';
-import './MainMain.css';
+import './NoteList.css';
 
-class MainMain extends Component {
+class NoteList extends Component {
   
   render() {
+    
     return (
-      <div className="main-main">
+      <div className="note-list">
         <ul>
           {this.props.notes.map(note =>
             <li key={note.id}>
-              {note.name}
-              {note.modified}
+              <div>{note.name}</div>
+              <div>{note.modified}</div>
             </li>
           )}
         </ul>
@@ -20,4 +21,4 @@ class MainMain extends Component {
   
 }
 
-export default MainMain;
+export default NoteList;
