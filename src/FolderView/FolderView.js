@@ -1,16 +1,21 @@
 import React from 'react';
+import NotesContext from '../NotesContext';
 import './FolderView.css';
 
-function FolderView(props) {
+function FolderView() {
   return (
-    <div className="note-sidebar">
-        <button>Back</button>
-        {props.folder && (
-          <h3 className='note-sidebar__folder-name'>
-            {props.folder.name}
-          </h3>
-        )}
-      </div>
+    <NotesContext.Consumer>
+      {(context) => (
+        <div className="note-sidebar">
+          <button>Back</button>
+          {context.folder && (
+            <h3 className='note-sidebar__folder-name'>
+              {context.folder.name}
+            </h3>
+          )}
+        </div>
+      )}
+    </NotesContext.Consumer>
   )
 }
 

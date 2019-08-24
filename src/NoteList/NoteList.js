@@ -1,29 +1,29 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import NotesContext from '../NotesContext';
 import './NoteList.css';
 
-class NoteList extends Component {
-  
-  render() {
-    
-    return (
-      <div className="note-list">
-        <ul>
-          {this.props.notes.map(note =>
-            <li key={note.id}>
-              <div>
-                <Link to={`/notes/${note.id}`}>
-                  {note.name}
-                </Link>
-              </div>
-              <div>{note.modified}</div>
-            </li>
-          )}
-        </ul>
-      </div>
-    )
-  }
-  
+function NoteList(props) {
+  return (
+    <NotesContext.Consumer>
+      {(context) => (
+        <div className="note-list">
+          <ul>
+            { context.notes.map(note =>
+              <li key={note.id}>
+                <div>
+                  <Link to={`/notes/${note.id}`}>
+                    {note.name}
+                  </Link>
+                </div>
+                <div>{note.modified}</div>
+              </li>
+            )}
+          </ul>
+        </div>
+      )}
+    </NotesContext.Consumer>
+  )
 }
 
 export default NoteList;
