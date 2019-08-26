@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import NotesContext from '../NotesContext';
 import './NoteView.css';
 
-function deleteBookmarkRequest(bookmarkId, callback) {
+function deleteNoteRequest(noteId, callback) {
   fetch('http://localhost:9090/notes/${noteId}', {
     method: 'DELETE',
     headers: {
@@ -23,43 +23,42 @@ function deleteBookmarkRequest(bookmarkId, callback) {
     .then(data => {
       // call the callback when the request is successful
       // this is where the App component can remove it from state
-      callback()
+      callback(noteId)
     })
     .catch(error => {
       console.error(error)
     })
 }
 
-export default function NoteView(props) {
-  return (
-    <NotesContext.Consumer>
-      {(context) => (
-        console.log('context is', context),
-          <section className='note-view'>
-            <div className='Note'>
-              <h2 className='Note__title'>{context.notes.name}</h2>
-              <button className='note-delete' type='button'>
-                Delete
-              </button>
-              <div className='note-dates'>
-                <div className='note-dates-modified'>
-                  Modified
-                  <span className='Date'>
-                    {format(context.notes.modified, 'DD MMM YYYY')}
-                  </span>
-                </div>
+class NoteView extends React.Component {
+  static contextType = NotesContext;
+
+  render() {
+    let note = this.context.findNote(this.context.notes, this.props.match.params.noteId);
+      return (
+        <section className='note-view'>
+          <div className='Note'>
+            <h2 className='Note__title'>{note.name}</h2>
+            <button className='note-delete' type='button' onClick={(e) => deleteNoteRequest(note.id, this.context.deleteNote)}>
+              Delete
+            </button>
+            <div className='note-dates'>
+              <div className='note-dates-modified'>
+                Modified
+                <span className='Date'>
+                  {format(note.modified, 'DD MMM YYYY')}
+                </span>
               </div>
             </div>
-            <div className='note-content'>
-              {/* {context.notes.content.split(/\n \r|\n/).map((para, i) =>
-                <p key={i}>{para}</p>
-              )} */}
-            </div>
-          </section>
-       
-        
-      )}
-    </NotesContext.Consumer>
-  )
+          </div>
+          <div className='note-content'>
+            {note.content.split(/\n \r|\n/).map((para, i) =>
+              <p key={i}>{para}</p>
+            )}
+          </div>
+        </section>
+    )
+  }
 }
 
+export default NoteView;

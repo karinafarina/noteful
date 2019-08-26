@@ -9,7 +9,7 @@ function NoteList(props) {
       {(context) => (
         <div className="note-list">
           <ul>
-            { context.notes.map(note =>
+            { context.getNotesForFolder(context.notes, props.match.params.folderId).map(note =>
               <li key={note.id}>
                 <div>
                   <Link to={`/notes/${note.id}`}>

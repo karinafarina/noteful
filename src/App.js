@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { Route } from 'react-router-dom';
-// import dummyStore from './dummy-store';
 import NotesContext from './NotesContext';
 import Header from './Header/Header';
 import './App.css';
@@ -65,28 +64,43 @@ class App extends Component {
   } 
 
   render() {
-    // const { folders, notes } = this.state;
-    const contextValue = {
-      folders: this.state.folders,
-      notes: this.state.notes,
-      deleteNote: this.deleteNote
+
+    const getNotesForFolder = (notes = [], folderId) => {
+      console.log(folderId)
+      return(
+        (!folderId)
+        ? notes
+        : notes.filter(note => note.folderId === folderId)
+      )
     }
-    
-    const findFolder = (folders, folderId) =>
-      folders.find(folder => folder.id === folderId)
 
     const findNote = (notes = [], noteId) =>
       notes.find(note => note.id === noteId)
 
-    const getNotesForFolder = (notes = [], folderId) => (
-      (!folderId)
-        ? notes
-        : notes.filter(note => note.folderId === folderId)
-    )
+    const deleteNote = (noteId) => {
+      const newNotes = this.state.notes.filter(note => note.id !== noteId);
+      this.setState({
+        notes: newNotes
+      })
+    }
+
+    const contextValue = {
+      folders: this.state.folders,
+      notes: this.state.notes,
+      deleteNote,
+      getNotesForFolder,
+      findNote
+    }
+    console.log(contextValue)
+
+    const findFolder = (folders, folderId) =>
+      folders.find(folder => folder.id === folderId)
+
+    
 
     // const countNotesForFolder = (notes = [], folderId) =>
     //   notes.filter(note => note.folderId === folderId).length
-
+   
     return (
       <main className='App' >
         <Header />

@@ -9,7 +9,7 @@ class FolderList extends Component {
     const { folders } = this.context;
     return (
       <div className="folder-list">
-        <ul >
+        <ul>
           {folders.map(folder =>
             <li key={folder.id}>
               <NavLink to={`/folders/${folder.id}`}>{folder.name}</NavLink>
