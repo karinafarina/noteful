@@ -62,9 +62,7 @@ class App extends Component {
       .catch(error => {
         console.error(error)
       })
-  }
-
-  
+  } 
 
   render() {
     // const { folders, notes } = this.state;
