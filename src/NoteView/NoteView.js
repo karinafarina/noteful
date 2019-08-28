@@ -3,38 +3,46 @@ import { format } from 'date-fns'
 import NotesContext from '../NotesContext';
 import './NoteView.css';
 
-function deleteNoteRequest(noteId, callback) {
-  fetch('http://localhost:9090/notes/${noteId}', {
-    method: 'DELETE',
-    headers: {
-      'content-type': 'application/json'
-    },
-  })
-    .then(res => {
-      if (!res.ok) {
-        // get the error message from the response,
-        return res.json().then(error => {
-          // then throw it
-          throw error
-        })
-      }
-      return res.json()
-    })
-    .then(data => {
-      // call the callback when the request is successful
-      // this is where the App component can remove it from state
-      callback(noteId)
-    })
-    .catch(error => {
-      console.error(error)
-    })
-}
 
+  
 class NoteView extends React.Component {
+  static defaultProps ={
+    onDeleteNote: () => {},
+  }
   static contextType = NotesContext;
 
+  handleClickDelete = e => {
+    e.preventDefault()
+    const noteId = this.props.id
+
+    fetch(`http://localhost:9090/notes/${noteId}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json'
+      },
+    })
+      .then(res => {
+        if (!res.ok) {
+          // get the error message from the response,
+          return res.json().then(error => {
+            // then throw it
+            throw error
+          })
+        }
+        return res.json()
+      })
+      .then(() => {
+        this.context.deleteNote(noteId)
+        // call the callback when the request is successful
+        // this is where the App component can remove it from state
+        this.props.onDeleteNote(noteId)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+    }
   render() {
-    console.log(this.context.notes);
+    console.log(this.context.deleteNote);
     console.log(this.props.match.params.noteId);
     console.log(this.props);
     let foundNote = this.context.notes.filter(note => {
@@ -47,7 +55,10 @@ class NoteView extends React.Component {
           <section className='note-view'>
             <div className='Note'>
               <h2 className='Note__title'>{foundNote[0].name}</h2>
-              <button className='note-delete' type='button' onClick={(e) => deleteNoteRequest(foundNote[0].id, this.context.deleteNote)}>
+              <button 
+                className='note-delete' 
+                type='button' 
+                onClick={this.handleClickDelete}>
                 Delete
               </button>
               <div className='note-dates'>

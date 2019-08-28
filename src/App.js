@@ -79,7 +79,7 @@ console.log('sdffsdjlsjf');
       notes.find(note => note.id === noteId)
 
     const deleteNote = (noteId) => {
-      const newNotes = this.state.notes.filter(note => note.id !== noteId);
+      const newNotes = this.state.notes.filter(note => note.id === noteId);
       this.setState({
         notes: newNotes
       })
