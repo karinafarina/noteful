@@ -34,30 +34,39 @@ class NoteView extends React.Component {
   static contextType = NotesContext;
 
   render() {
-    let note = this.context.findNote(this.context.notes, this.props.match.params.noteId);
-      return (
-        <section className='note-view'>
-          <div className='Note'>
-            <h2 className='Note__title'>{note.name}</h2>
-            <button className='note-delete' type='button' onClick={(e) => deleteNoteRequest(note.id, this.context.deleteNote)}>
-              Delete
-            </button>
-            <div className='note-dates'>
-              <div className='note-dates-modified'>
-                Modified
-                <span className='Date'>
-                  {format(note.modified, 'DD MMM YYYY')}
-                </span>
+    console.log(this.context.notes);
+    console.log(this.props.match.params.noteId);
+    console.log(this.props);
+    let foundNote = this.context.notes.filter(note => {
+      return note.id === this.props.match.params.noteId;
+    });
+    console.log(foundNote);
+        if(foundNote) {
+          console.log(foundNote);
+        return (
+          <section className='note-view'>
+            <div className='Note'>
+              <h2 className='Note__title'>{foundNote[0].name}</h2>
+              <button className='note-delete' type='button' onClick={(e) => deleteNoteRequest(foundNote[0].id, this.context.deleteNote)}>
+                Delete
+              </button>
+              <div className='note-dates'>
+                <div className='note-dates-modified'>
+                  Modified
+                  <span className='Date'>
+                    {format(foundNote[0].modified, 'DD MMM YYYY')}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className='note-content'>
-            {note.content.split(/\n \r|\n/).map((para, i) =>
-              <p key={i}>{para}</p>
-            )}
-          </div>
-        </section>
-    )
+            <div className='note-content'>
+              {foundNote[0].content.split(/\n \r|\n/).map((para, i) =>
+                <p key={i}>{para}</p>
+              )}
+            </div>
+          </section>
+      )
+    }
   }
 }
 

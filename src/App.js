@@ -39,9 +39,10 @@ class App extends Component {
       .catch(error => {
         console.error(error)
       });
-
+console.log('sdffsdjlsjf');
     fetch('http://localhost:9090/notes')
       .then(res => {
+        console.log(res);
         if (!res.ok) {
           // get the error message from the response,
           return res.json().then(error => {
