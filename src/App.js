@@ -67,19 +67,20 @@ console.log('sdffsdjlsjf');
   render() {
 
     const getNotesForFolder = (notes = [], folderId) => {
-      console.log(folderId)
-      return(
-        (!folderId)
-        ? notes
-        : notes.filter(note => note.folderId === folderId)
-      )
+      console.log(folderId);
+      console.log(notes);
+      let filteredNotes = notes.filter(note => note.folderId === folderId);
+      console.log(filteredNotes);
+      return !folderId ? notes : filteredNotes;
     }
 
     const findNote = (notes = [], noteId) =>
       notes.find(note => note.id === noteId)
 
     const deleteNote = (noteId) => {
-      const newNotes = this.state.notes.filter(note => note.id === noteId);
+      const newNotes = this.state.notes.filter(note => note.id !== noteId);
+      console.log(noteId);
+      console.log(newNotes);
       this.setState({
         notes: newNotes
       })

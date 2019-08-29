@@ -13,7 +13,7 @@ class NoteView extends React.Component {
 
   handleClickDelete = e => {
     e.preventDefault()
-    const noteId = this.props.id
+    const noteId = this.props.match.params.noteId;
 
     fetch(`http://localhost:9090/notes/${noteId}`, {
       method: 'DELETE',
@@ -49,8 +49,7 @@ class NoteView extends React.Component {
       return note.id === this.props.match.params.noteId;
     });
     console.log(foundNote);
-        if(foundNote) {
-          console.log(foundNote);
+      if(foundNote.length) {
         return (
           <section className='note-view'>
             <div className='Note'>
@@ -77,6 +76,10 @@ class NoteView extends React.Component {
             </div>
           </section>
       )
+    } else {
+        return (
+        <section className='note-view'></section>
+        )
     }
   }
 }
