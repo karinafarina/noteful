@@ -15,7 +15,7 @@ class FolderView extends React.Component {
     return (
       <div className="folder-view">
         <button type="button" onClick={this.handleBackButton}>Back</button>
-            {this.context.folder && (
+            {currentFolder && (
               <h3 className='folder-view-name'>
                 {currentFolder.name}
               </h3>
