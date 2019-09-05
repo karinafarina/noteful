@@ -21,6 +21,7 @@ function NoteList(props) {
               </li>
             )}
           </ul>
+          <button type="button" className="add-note-button"><Link to="/add-note">+Note</Link></button>
         </div>
       )}
     </NotesContext.Consumer>

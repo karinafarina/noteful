@@ -1,21 +1,45 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import NotesContext from '../NotesContext';
 
 export class AddFolder extends Component {
+
+  static contextType = NotesContext;
+
   constructor(props) {
     super(props)
     this.nameInput = React.createRef();
-    // this.state = {
-    //    error: null,
-    // }
   }
 
   handleAddFolder(e) {
     e.preventDefault()
-    // const name = this.nameInput.current.value;
-    console.log(this.nameInput.current.value);
-    // this.setState({ error: null})
-    // fetch('http://localhost:9090/folders')
-  }
+    const name = this.nameInput.current.value;
+    console.log(name);
+    this.setState({ error: null});
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({name}),
+      headers: {
+        "content-type": "application/json",
+      }
+    }
+    fetch('http://localhost:9090/folders', options)
+    .then(res => {
+      console.log(res);
+      if(!res.ok) {
+        throw new Error('Something went wrong, please try again later');
+      }
+      return res.json();
+     })
+     .then((folder) => {
+        console.log(folder);
+        this.context.addFolder(folder);
+     })
+      .catch(error => {
+        console.error(error)
+      })
+    this.props.history.push('/')
+    }
+  
   
   render() {
     return (
@@ -26,11 +50,8 @@ export class AddFolder extends Component {
           onSubmit={e => this.handleAddFolder(e)}
           >
             <label>Name</label>
-            <input type="text" name="folder-name" id="folder-name" ref={this.NameInput} defaultValue="Frank" />
+            <input type="text" name="folder-name" id="folder-name" ref={this.nameInput} />
             <button className="add-folder-button" type="submit">Add folder</button>
-            {/* <div className="form-error" role='alert'>
-              {error && <p>{error.message}</p>}
-            </div> */}
           </form>
       </div>
     )

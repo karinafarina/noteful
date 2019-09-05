@@ -6,9 +6,9 @@ import './NoteView.css';
 
   
 class NoteView extends React.Component {
-  static defaultProps ={
-    onDeleteNote: () => {},
-  }
+  // static defaultProps ={
+  //   onDeleteNote: () => {},
+  // }
   static contextType = NotesContext;
 
   handleClickDelete = e => {
@@ -33,9 +33,6 @@ class NoteView extends React.Component {
       })
       .then(() => {
         this.context.deleteNote(noteId)
-        // call the callback when the request is successful
-        // this is where the App component can remove it from state
-        this.props.onDeleteNote(noteId)
       })
       .catch(error => {
         console.error(error)

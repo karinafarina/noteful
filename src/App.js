@@ -8,6 +8,7 @@ import NoteList from './NoteList/NoteList';
 import NoteView from './NoteView/NoteView'
 import FolderView from './FolderView/FolderView';
 import AddFolder from './AddFolder/AddFolder';
+import AddNote from './AddNote/AddNote';
 
 class App extends Component {
   constructor(props) {
@@ -78,12 +79,30 @@ class App extends Component {
       })
     }
 
+    const addFolder = (folder) => {
+      const folders = [...this.state.folders, folder]
+      this.setState({
+        folders
+      })
+    }
+
+    const addNote = (note) => {
+      console.log(note);
+      const notes = [...this.state.notes, note]
+      
+      this.setState({
+        notes
+      })
+    }
+
     const contextValue = {
       folders: this.state.folders,
       notes: this.state.notes,
       deleteNote,
       getNotesForFolder,
-      findNote
+      findNote,
+      addFolder,
+      addNote,
     }
     // const findFolder = (folders, folderId) =>
     //   folders.find(folder => folder.id === folderId)
@@ -125,6 +144,10 @@ class App extends Component {
             <Route
               path='/add-folder'
               component={AddFolder}
+            />
+            <Route
+              path='/add-note'
+              component={AddNote}
             />
           </NotesContext.Provider>
         </div> 

@@ -16,7 +16,7 @@ class FolderList extends Component {
             </li>
           )}
         </ul>
-        <button type="button" className="add-folder-button"><Link to='/add-folder'>+</Link></button>
+        <button type="button" className="add-folder-button"><Link to='/add-folder'>+Folder</Link></button>
       </div>
     )
   }
