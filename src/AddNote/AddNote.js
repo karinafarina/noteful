@@ -17,10 +17,10 @@ export class AddNote extends Component {
     e.preventDefault();
     const name = this.nameInput.current.value;
     const content = this.contentInput.current.value;
-    const folder = this.folderInput.current.value;
+    const folderId = this.folderInput.current.value;
     const options = {
       method: 'POST',
-      body: JSON.stringify({ name, content, folder }),
+      body: JSON.stringify({ name, content, folderId }),
       headers: {
         "content-type": "application/json",
       }

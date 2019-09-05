@@ -7,9 +7,7 @@ import './NoteView.css';
 
   
 class NoteView extends React.Component {
-  // static defaultProps ={
-  //   onDeleteNote: () => {},
-  // }
+  
   static contextType = NotesContext;
 
   handleClickDelete = e => {
@@ -40,9 +38,6 @@ class NoteView extends React.Component {
       })
     }
   render() {
-    console.log(this.context.deleteNote);
-    console.log(this.props.match.params.noteId);
-    console.log(this.props);
     let foundNote = this.context.notes.filter(note => {
       return note.id === this.props.match.params.noteId;
     });
