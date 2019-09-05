@@ -77,6 +77,7 @@ class App extends Component {
       this.setState({
         notes: newNotes
       })
+      
     }
 
     const addFolder = (folder) => {

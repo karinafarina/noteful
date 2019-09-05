@@ -1,5 +1,6 @@
-import React from 'react'
-import { format } from 'date-fns'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { format } from 'date-fns';
 import NotesContext from '../NotesContext';
 import './NoteView.css';
 
@@ -54,8 +55,10 @@ class NoteView extends React.Component {
               <button 
                 className='note-delete' 
                 type='button' 
-                onClick={this.handleClickDelete}>
-                Delete
+                onClick={this.handleClickDelete}
+              >
+                <Link to="/">Delete</Link>
+                
               </button>
               <div className='note-dates'>
                 <div className='note-dates-modified'>
