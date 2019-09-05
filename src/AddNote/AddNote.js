@@ -53,9 +53,9 @@ export class AddNote extends Component {
             <input type="text" name="content" id="add-note-content" ref={this.contentInput} />
             <label htmlFor="folder">Folder</label>
             <select id="note-folder-select" ref={this.folderInput} >
-              <option value="b0715efe-ffaf-11e8-8eb2-f2801f1b9fd1">Important</option>
-              <option value="b07161a6-ffaf-11e8-8eb2-f2801f1b9fd1">Super</option>
-              <option value="b07162f0-ffaf-11e8-8eb2-f2801f1b9fd1">Spangly</option>
+              {this.context.folders.map(folder =>
+                <option value={folder.id}>{folder.name}</option>
+              )}            
             </select>
             <button type="submit">Add note</button>
           </form>

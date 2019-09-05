@@ -9,6 +9,7 @@ import NoteView from './NoteView/NoteView'
 import FolderView from './FolderView/FolderView';
 import AddFolder from './AddFolder/AddFolder';
 import AddNote from './AddNote/AddNote';
+import NoteError from './NoteError';
 
 class App extends Component {
   constructor(props) {
@@ -109,50 +110,52 @@ class App extends Component {
     //   folders.find(folder => folder.id === folderId)
    
     return (
-      <main className='App' >
-        <Header />
-        <div className='main'>
-          <NotesContext.Provider value={contextValue}>
+      <NoteError>
+        <main className='App' >
+          <Header />
+          <div className='main'>
+            <NotesContext.Provider value={contextValue}>
+              {['/', '/folders/:folderId'].map(path => (
+                <Route
+                  exact
+                  key={path}
+                  path={path}
+                  component={FolderList}
+                />
+              )
+              )}
+            
+              <Route
+                path='/notes/:noteId'
+                component={FolderView}
+              />
+        
+            <Route 
+              path='/notes/:noteId'
+              component={NoteView}
+            />
+            {/* Map through these two options, same for both */}
             {['/', '/folders/:folderId'].map(path => (
               <Route
                 exact
                 key={path}
                 path={path}
-                component={FolderList}
+                component={NoteList}
               />
-            )
-            )}
-          
-            <Route
-              path='/notes/:noteId'
-              component={FolderView}
-            />
-      
-          <Route 
-            path='/notes/:noteId'
-            component={NoteView}
-          />
-          {/* Map through these two options, same for both */}
-          {['/', '/folders/:folderId'].map(path => (
-            <Route
-              exact
-              key={path}
-              path={path}
-              component={NoteList}
-            />
-          ))
-          }
-            <Route
-              path='/add-folder'
-              component={AddFolder}
-            />
-            <Route
-              path='/add-note'
-              component={AddNote}
-            />
-          </NotesContext.Provider>
-        </div> 
-      </main>
+            ))
+            }
+              <Route
+                path='/add-folder'
+                component={AddFolder}
+              />
+              <Route
+                path='/add-note'
+                component={AddNote}
+              />
+            </NotesContext.Provider>
+          </div> 
+        </main>
+      </NoteError>
     );
   }
 }
