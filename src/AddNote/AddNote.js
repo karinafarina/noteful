@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import NotesContext from '../NotesContext';
-
+import PropTypes from 'prop-types';
 
 export class AddNote extends Component {
 
@@ -33,7 +33,6 @@ export class AddNote extends Component {
       return res.json();
     })
     .then((note) => {
-      console.log(note);
       this.context.addNote(note);
     })
     .catch(error => {
@@ -54,7 +53,7 @@ export class AddNote extends Component {
             <label htmlFor="folder">Folder</label>
             <select id="note-folder-select" ref={this.folderInput} >
               {this.context.folders.map(folder =>
-                <option value={folder.id}>{folder.name}</option>
+                <option key={folder.id} value={folder.id}>{folder.name}</option>
               )}            
             </select>
             <button type="submit">Add note</button>
@@ -64,4 +63,15 @@ export class AddNote extends Component {
   }
 }
 
-export default AddNote
+AddNote.defaultProps = {
+  name: "",
+  content: ""
+};
+
+AddNote.propTypes = {
+  name: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  folder: PropTypes.array
+};
+
+export default AddNote;

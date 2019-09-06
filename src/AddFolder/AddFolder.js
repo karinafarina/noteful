@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NotesContext from '../NotesContext';
+import PropTypes from 'prop-types';
 
 export class AddFolder extends Component {
 
@@ -13,7 +14,6 @@ export class AddFolder extends Component {
   handleAddFolder(e) {
     e.preventDefault()
     const name = this.nameInput.current.value;
-    console.log(name);
     this.setState({ error: null});
     const options = {
       method: 'POST',
@@ -24,14 +24,12 @@ export class AddFolder extends Component {
     }
     fetch('http://localhost:9090/folders', options)
     .then(res => {
-      console.log(res);
       if(!res.ok) {
         throw new Error('Something went wrong, please try again later');
       }
       return res.json();
      })
      .then((folder) => {
-        console.log(folder);
         this.context.addFolder(folder);
      })
       .catch(error => {
@@ -57,5 +55,9 @@ export class AddFolder extends Component {
     )
   }
 }
+
+AddFolder.propTypes = {
+  value: PropTypes.string
+};
 
 export default AddFolder

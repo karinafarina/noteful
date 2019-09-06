@@ -8,7 +8,6 @@ function NoteList(props) {
     <NotesContext.Consumer>
       {(context) => (
         <div className="note-list">
-          {console.log(context.notes)}
           <ul>
             {context.getNotesForFolder(context.notes, props.match.params.folderId).map(note =>
               <li key={note.id}>

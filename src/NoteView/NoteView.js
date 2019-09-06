@@ -41,7 +41,6 @@ class NoteView extends React.Component {
     let foundNote = this.context.notes.filter(note => {
       return note.id === this.props.match.params.noteId;
     });
-    console.log(foundNote);
       if(foundNote.length) {
         return (
           <section className='note-view'>
