@@ -96,13 +96,7 @@ class App extends Component {
       })
     }
 
-    const updateError = (name) => {
-      if (name.length === 0) {
-        this.setState({
-          error: "Name is required"
-        })
-      }
-    }
+    
 
     const contextValue = {
       folders: this.state.folders,
@@ -112,7 +106,7 @@ class App extends Component {
       findNote,
       addFolder,
       addNote,
-      updateError,
+      
     }
     // const findFolder = (folders, folderId) =>
     //   folders.find(folder => folder.id === folderId)

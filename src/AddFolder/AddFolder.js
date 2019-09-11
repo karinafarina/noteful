@@ -8,17 +8,11 @@ export class AddFolder extends Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      error: null
+    }
     this.nameInput = React.createRef();
   }
-
-  // validateFolderName(fieldValue) {
-  //   const name = this.state.name.value.trim();
-  //   if(name.length === 0) {
-  //     return 'Name is required';
-  //   } else if(name.length < 3) {
-  //     return 'Name must be at least 3 characters long';
-  //   }
-  // }
 
   handleAddFolder(e) {
     e.preventDefault()
@@ -28,7 +22,7 @@ export class AddFolder extends Component {
     // if (name.string === 0)
     const name = this.nameInput.current.value.trim();
     console.log(name);
-    this.context.updateError(name);
+    this.updateError(name);
       //this.setState({ error: null});
       const options = {
         method: 'POST',
@@ -55,6 +49,15 @@ export class AddFolder extends Component {
   
   
   render() {
+
+    const updateError = (name) => {
+      if (name.length === 0) {
+        this.setState({
+          error: "Name is required"
+        })
+      }
+    } 
+
     return (
       <div>
         <h1>Create a folder</h1>
