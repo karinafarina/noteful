@@ -21,8 +21,10 @@ export class AddFolder extends Component {
     // const name = 
     // if (name.string === 0)
     const name = this.nameInput.current.value.trim();
-    console.log(name);
-    this.updateError(name);
+    if (name.length === 0) {
+      this.updateError(name);
+      return;
+    }
       //this.setState({ error: null});
       const options = {
         method: 'POST',
@@ -47,17 +49,15 @@ export class AddFolder extends Component {
       this.props.history.push('/')
     }
   
+  updateError = (name) => {
+    console.log(name);
+      this.setState({
+         error: "Name is required"
+      })
+    }
+
   
   render() {
-
-    const updateError = (name) => {
-      if (name.length === 0) {
-        this.setState({
-          error: "Name is required"
-        })
-      }
-    } 
-
     return (
       <div>
         <h1>Create a folder</h1>
@@ -67,6 +67,7 @@ export class AddFolder extends Component {
           >
             <label>Name</label>
             <input type="text" name="folder-name" id="folder-name" ref={this.nameInput} required />
+            <div className='error'>{this.state.error}</div>
             <button className="add-folder-button" type="submit">Add folder</button>
           </form>
       </div>
