@@ -16,7 +16,8 @@ class App extends Component {
     super(props) 
     this.state = {
       folders: [],
-      notes: []
+      notes: [],
+      error: null,
     }
   };
 
@@ -88,20 +89,19 @@ class App extends Component {
       })
     }
 
-    // const updateError = (name) => {
-    //   if (name.length === 0) {
-    //     this.setState({
-          
-    //     })
-    //   return "Name is required"
-    // }
-
     const addNote = (note) => {
       const notes = [...this.state.notes, note]
-      
       this.setState({
         notes
       })
+    }
+
+    const updateError = (name) => {
+      if (name.length === 0) {
+        this.setState({
+          error: "Name is required"
+        })
+      }
     }
 
     const contextValue = {
@@ -112,6 +112,7 @@ class App extends Component {
       findNote,
       addFolder,
       addNote,
+      updateError,
     }
     // const findFolder = (folders, folderId) =>
     //   folders.find(folder => folder.id === folderId)

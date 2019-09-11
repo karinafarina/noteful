@@ -28,10 +28,8 @@ export class AddFolder extends Component {
     // if (name.string === 0)
     const name = this.nameInput.current.value.trim();
     console.log(name);
-    if (name.length === 0) {
-      return "Name is required"
-    } else {
-      this.setState({ error: null});
+    this.context.updateError(name);
+      //this.setState({ error: null});
       const options = {
         method: 'POST',
         body: JSON.stringify({name}),
@@ -54,7 +52,6 @@ export class AddFolder extends Component {
         })
       this.props.history.push('/')
     }
-  }
   
   
   render() {
