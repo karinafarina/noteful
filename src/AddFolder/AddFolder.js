@@ -11,32 +11,50 @@ export class AddFolder extends Component {
     this.nameInput = React.createRef();
   }
 
+  // validateFolderName(fieldValue) {
+  //   const name = this.state.name.value.trim();
+  //   if(name.length === 0) {
+  //     return 'Name is required';
+  //   } else if(name.length < 3) {
+  //     return 'Name must be at least 3 characters long';
+  //   }
+  // }
+
   handleAddFolder(e) {
     e.preventDefault()
-    const name = this.nameInput.current.value;
-    this.setState({ error: null});
-    const options = {
-      method: 'POST',
-      body: JSON.stringify({name}),
-      headers: {
-        "content-type": "application/json",
+    //if empty sting add error- update state if empty string
+    //else go on with logic
+    // const name = 
+    // if (name.string === 0)
+    const name = this.nameInput.current.value.trim();
+    console.log(name);
+    if (name.length === 0) {
+      return "Name is required"
+    } else {
+      this.setState({ error: null});
+      const options = {
+        method: 'POST',
+        body: JSON.stringify({name}),
+        headers: {
+          "content-type": "application/json",
+        }
       }
-    }
-    fetch('http://localhost:9090/folders', options)
-    .then(res => {
-      if(!res.ok) {
-        throw new Error('Something went wrong, please try again later');
-      }
-      return res.json();
-     })
-     .then((folder) => {
-        this.context.addFolder(folder);
-     })
-      .catch(error => {
-        console.error(error)
+      fetch('http://localhost:9090/folders', options)
+      .then(res => {
+        if(!res.ok) {
+          throw new Error('Something went wrong, please try again later');
+        }
+        return res.json();
       })
-    this.props.history.push('/')
+      .then((folder) => {
+          this.context.addFolder(folder);
+      })
+        .catch(error => {
+          console.error(error)
+        })
+      this.props.history.push('/')
     }
+  }
   
   
   render() {
@@ -48,7 +66,7 @@ export class AddFolder extends Component {
           onSubmit={e => this.handleAddFolder(e)}
           >
             <label>Name</label>
-            <input type="text" name="folder-name" id="folder-name" ref={this.nameInput} />
+            <input type="text" name="folder-name" id="folder-name" ref={this.nameInput} required />
             <button className="add-folder-button" type="submit">Add folder</button>
           </form>
       </div>

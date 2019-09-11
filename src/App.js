@@ -88,6 +88,14 @@ class App extends Component {
       })
     }
 
+    // const updateError = (name) => {
+    //   if (name.length === 0) {
+    //     this.setState({
+          
+    //     })
+    //   return "Name is required"
+    // }
+
     const addNote = (note) => {
       const notes = [...this.state.notes, note]
       
