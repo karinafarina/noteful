@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import NotesContext from '../NotesContext';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import ValididationError from '../ValidationError';
 
 export class AddNote extends Component {
@@ -23,6 +23,7 @@ export class AddNote extends Component {
     const name = this.nameInput.current.value.trim();
     const content = this.contentInput.current.value.trim();
     const folderId = this.folderInput.current.value;
+    const modified = new Date();
     if(name.length === 0) {
       this.updateNameError(name);
       return;
@@ -33,7 +34,7 @@ export class AddNote extends Component {
     }
     const options = {
       method: 'POST',
-      body: JSON.stringify({ name, content, folderId }),
+      body: JSON.stringify({ name, content, folderId, modified }),
       headers: {
         "content-type": "application/json",
       }
@@ -97,10 +98,10 @@ AddNote.defaultProps = {
   content: ""
 };
 
-AddNote.propTypes = {
-  name: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-  folder: PropTypes.array
-};
+// AddNote.propTypes = {
+//   name: PropTypes.string.isRequired,
+//   content: PropTypes.string.isRequired,
+//   folder: PropTypes.array
+// };
 
 export default AddNote;
