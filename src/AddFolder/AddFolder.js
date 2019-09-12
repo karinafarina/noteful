@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import NotesContext from '../NotesContext';
 import PropTypes from 'prop-types';
+import ValidationError from '../ValidationError';
 
 export class AddFolder extends Component {
 
@@ -16,10 +17,6 @@ export class AddFolder extends Component {
 
   handleAddFolder(e) {
     e.preventDefault()
-    //if empty sting add error- update state if empty string
-    //else go on with logic
-    // const name = 
-    // if (name.string === 0)
     const name = this.nameInput.current.value.trim();
     if (name.length === 0) {
       this.updateError(name);
@@ -52,12 +49,13 @@ export class AddFolder extends Component {
   updateError = (name) => {
     console.log(name);
       this.setState({
-         error: "Name is required"
+         error: "Must contain letters"
       })
     }
 
   
   render() {
+    console.log(this.state.error);
     return (
       <div>
         <h1>Create a folder</h1>
@@ -67,7 +65,7 @@ export class AddFolder extends Component {
           >
             <label>Name</label>
             <input type="text" name="folder-name" id="folder-name" ref={this.nameInput} required />
-            <div className='error'>{this.state.error}</div>
+            <ValidationError message={this.state.error}/>
             <button className="add-folder-button" type="submit">Add folder</button>
           </form>
       </div>
