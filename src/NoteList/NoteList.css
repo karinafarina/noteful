@@ -1,4 +1,7 @@
-
+.note-list {
+  background-color: aliceblue;
+  width: 400px;
+}
 
 li {
   list-style-type: none;

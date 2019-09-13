@@ -1,9 +1,11 @@
 .App {
-  
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
 }
-
+html {
+  background-color: antiquewhite
+}
 .main {
   display: flex;
   justify-content: space-around;
-  margin-top: 40px;
+  
 }
