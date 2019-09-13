@@ -7,5 +7,12 @@ html {
 .main {
   display: flex;
   justify-content: space-around;
-  
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  color: plum;
 }
