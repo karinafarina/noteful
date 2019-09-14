@@ -10,14 +10,16 @@ export class AddFolder extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      name: {
+        value: ''
+      },
       error: null
     }
-    this.nameInput = React.createRef();
   }
 
   handleAddFolder(e) {
     e.preventDefault()
-    const name = this.nameInput.current.value.trim();
+    const name = this.state.name.value.trim();
     if (name.length === 0) {
       this.updateError(name);
       return;
@@ -45,6 +47,10 @@ export class AddFolder extends Component {
         })
       this.props.history.push('/')
     }
+
+  updateName = (name => {
+    this.setState({name: {value:name}});
+  })
   
   updateError = (name) => {
     console.log(name);
@@ -53,9 +59,7 @@ export class AddFolder extends Component {
       })
     }
 
-  
   render() {
-    console.log(this.state.error);
     return (
       <div>
         <h1>Create a folder</h1>
@@ -64,8 +68,8 @@ export class AddFolder extends Component {
           onSubmit={e => this.handleAddFolder(e)}
           >
             <label>Name</label>
-            <input type="text" name="folder-name" id="folder-name" ref={this.nameInput} required />
-            <ValidationError message={this.state.error}/>
+            <input type="text" name="folder-name" id="folder-name" onChange={e => this.updateName(e.target.value)} required />
+            <ValidationError className="error" message={this.state.error}/>
             <button className="add-folder-button" type="submit">Add folder</button>
           </form>
       </div>

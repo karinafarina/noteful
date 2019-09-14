@@ -9,10 +9,16 @@ export class AddNote extends Component {
 
   constructor(props) {
     super(props)
-    this.nameInput = React.createRef();
-    this.contentInput = React.createRef();
-    this.folderInput = React.createRef();
     this.state = {
+      name: {
+        value: ''
+      },
+      content: {
+        value: ''
+      },
+      folderId: {
+        value: ''
+      },
       titleError: null,
       contentError: null
     }
@@ -20,9 +26,9 @@ export class AddNote extends Component {
 
   handleAddNote(e) {
     e.preventDefault();
-    const name = this.nameInput.current.value.trim();
-    const content = this.contentInput.current.value.trim();
-    const folderId = this.folderInput.current.value;
+    const name = this.state.name.value.trim();
+    const content = this.state.content.value.trim();
+    const folderId = this.state.folderId.value;
     const modified = new Date();
     if(name.length === 0) {
       this.updateNameError(name);
@@ -55,6 +61,18 @@ export class AddNote extends Component {
     this.props.history.push('/')
   }
 
+  updateName(name) {
+    this.setState({name: {value: name}})
+  }
+
+  updateContent(content) {
+    this.setState({content: {value: content}})
+  }
+
+  updateFolderId(folderId) {
+    this.setState({folderId: {value: folderId}})
+  }
+
   updateNameError = (name) => {
     console.log(name);
     this.setState({
@@ -69,19 +87,18 @@ export class AddNote extends Component {
   }
 
   render() {
-    console.log(this.state.titleError);
     return (
       <div>
         <h1>Create a note</h1>
           <form className="add-note" onSubmit={e => this.handleAddNote(e)}>
             <label htmlFor="name">Name</label>
-            <input type="text" name="name" id="add-note-name" ref={this.nameInput} required />
-            <ValididationError message={this.state.titleError} />
+            <input type="text" name="name" id="add-note-name" onChange={e => this.updateName(e.target.value)} required />
+            <ValididationError className="error" message={this.state.titleError} />
             <label htmlFor="content">Content</label>
-            <input type="text" name="content" id="add-note-content" ref={this.contentInput} />
-            <ValididationError message={this.state.contentError} />
-            <label htmlFor="folder">Folder</label>
-            <select id="note-folder-select" ref={this.folderInput} >
+            <input type="text" name="content" id="add-note-content" onChange={e => this.updateContent(e.target.value)} />
+            <ValididationError className="error" message={this.state.contentError} />
+            <label htmlFor="note-folder-select">Folder</label>
+            <select id="note-folder-select" onChange={e => this.updateFolderId(e.target.value)} >
               {this.context.folders.map(folder =>
                 <option key={folder.id} value={folder.id}>{folder.name}</option>
               )}            
@@ -97,11 +114,5 @@ AddNote.defaultProps = {
   name: "",
   content: ""
 };
-
-// AddNote.propTypes = {
-//   name: PropTypes.string.isRequired,
-//   content: PropTypes.string.isRequired,
-//   folder: PropTypes.array
-// };
 
 export default AddNote;
