@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import NotesContext from '../NotesContext';
-// import PropTypes from 'prop-types';
-import ValididationError from '../ValidationError';
+import PropTypes from 'prop-types';
+import ValidationError from '../ValidationError';
 
 export class AddNote extends Component {
 
@@ -11,10 +11,12 @@ export class AddNote extends Component {
     super(props)
     this.state = {
       name: {
-        value: ''
+        value: '',
+        touched: false
       },
       content: {
-        value: ''
+        value: '',
+        touched: false
       },
       folderId: {
         value: ''
@@ -24,20 +26,28 @@ export class AddNote extends Component {
     }
   }
 
+  updateName(name) {
+    this.setState({ name: { value: name, touched: true } })
+  }
+
+  updateContent(content) {
+    this.setState({ content: { value: content, touched: true } })
+  }
+
+  updateFolderId(folderId) {
+    this.setState({ folderId: { value: folderId } })
+  }
+
   handleAddNote(e) {
     e.preventDefault();
     const name = this.state.name.value.trim();
     const content = this.state.content.value.trim();
-    const folderId = this.state.folderId.value;
+    const folderId = 
+      this.state.folderId.value ? 
+      this.state.folderId.value : 
+      this.context.folders[0].id;
     const modified = new Date();
-    if(name.length === 0) {
-      this.updateNameError(name);
-      return;
-    }
-    if (content.length === 0) {
-      this.updateContentError(content);
-      return;
-    }
+    
     const options = {
       method: 'POST',
       body: JSON.stringify({ name, content, folderId, modified }),
@@ -61,48 +71,54 @@ export class AddNote extends Component {
     this.props.history.push('/')
   }
 
-  updateName(name) {
-    this.setState({name: {value: name}})
+  validateName() {
+    const name = this.state.name.value.trim();
+    if (name.length === 0) {
+      return "Name is required";
+    } else if (name.length < 3) {
+      return "Name must be at least 3 characters long";
+    }
   }
 
-  updateContent(content) {
-    this.setState({content: {value: content}})
-  }
-
-  updateFolderId(folderId) {
-    this.setState({folderId: {value: folderId}})
-  }
-
-  updateNameError = () => {
-    this.setState({
-      titleError: "Must contain letters"
-    })
-  }
-
-  updateContentError = () => {
-    this.setState({
-      contentError: "Must contain content"
-    })
+  validateContent() {
+    const content = this.state.content.value.trim();
+    if (content.length === 0) {
+      return "Content is required";
+    } else if (content.length < 3) {
+      return "Content must be at least 3 characters long";
+    }
   }
 
   render() {
+    const nameError = this.validateName();
+    const contentError = this.validateContent();
     return (
       <div>
         <h1>Create a note</h1>
           <form className="add-note" onSubmit={e => this.handleAddNote(e)}>
             <label htmlFor="name">Name</label>
             <input type="text" name="name" id="add-note-name" onChange={e => this.updateName(e.target.value)} />
-            <ValididationError className="error" message={this.state.titleError} />
+            {this.state.name.touched && (
+              <ValidationError message={nameError} />
+            )}
             <label htmlFor="content">Content</label>
             <input type="text" name="content" id="add-note-content" onChange={e => this.updateContent(e.target.value)} />
-            <ValididationError className="error" message={this.state.contentError} />
+            {this.state.content.touched && (
+              <ValidationError message={contentError} />
+            )}
             <label htmlFor="note-folder-select">Folder</label>
             <select id="note-folder-select" onChange={e => this.updateFolderId(e.target.value)} >
               {this.context.folders.map(folder =>
                 <option key={folder.id} value={folder.id}>{folder.name}</option>
               )}            
             </select>
-            <button type="submit">Add note</button>
+            <button 
+              type="submit"
+              disabled={
+                nameError ||
+                contentError
+              }
+            >Add note</button>
           </form>
       </div>
     )
@@ -111,7 +127,14 @@ export class AddNote extends Component {
 
 AddNote.defaultProps = {
   name: "",
-  content: ""
+  content: "",
+  folderId: 'Important'
+};
+
+AddNote.propTypes = {
+  name: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+  folder: PropTypes.array
 };
 
 export default AddNote;

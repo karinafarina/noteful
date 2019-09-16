@@ -13,41 +13,40 @@ export class AddFolder extends Component {
       name: {
         value: '',
         touched: false
-      },
+      }
     };
   }
 
-  updateName = (name) => {
-    this.setState({ name: { value: name, touched: true }});
-  };
+  updateName(name) {
+    this.setState({ name: { value: name, touched: true } });
+  }
 
   handleAddFolder(e) {
     e.preventDefault();
-    const { name } = this.state;
-    console.log("Name " , name.value);
-
-      const options = {
-        method: 'POST',
-        body: JSON.stringify({name}),
-        headers: {
-          "content-type": "application/json",
-        }
+    const name = this.state.name.value;
+    
+    const options = {
+      method: 'POST',
+      body: JSON.stringify({ name }),
+      headers: {
+        "content-type": "application/json",
       }
-      fetch('http://localhost:9090/folders', options)
+    }
+    fetch('http://localhost:9090/folders', options)
       .then(res => {
-        if(!res.ok) {
+        if (!res.ok) {
           throw new Error('Something went wrong, please try again later');
         }
         return res.json();
       })
       .then((folder) => {
-          this.context.addFolder(folder);
+        this.context.addFolder(folder);
       })
-        .catch(error => {
-          console.error(error)
-        })
-      this.props.history.push('/')
-    }
+      .catch(error => {
+        console.error(error)
+      })
+    this.props.history.push('/')
+  }
 
   validateName() {
     const name = this.state.name.value.trim();
@@ -70,8 +69,9 @@ export class AddFolder extends Component {
           >
             <label>Name</label>
             <input type="text" name="folder-name" id="folder-name" onChange={e => this.updateName(e.target.value)} />
-            {this.state.name.touched && <ValidationError message={nameError} />}
-            
+            {this.state.name.touched && (
+              <ValidationError message={nameError} />
+            )}
             <button 
               className="add-folder-button" 
               type="submit"
