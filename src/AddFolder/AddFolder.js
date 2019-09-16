@@ -25,15 +25,7 @@ export class AddFolder extends Component {
     e.preventDefault();
     const { name } = this.state;
     console.log("Name " , name.value);
-    
-    validateName() {
-      const name = this.state.name.value.trim();
-      if (name.length === 0) {
-        return "Name is required";
-      } else if (name.length < 3) {
-        return "Name must be at least 3 characters long";
-      }
-    }
+
       const options = {
         method: 'POST',
         body: JSON.stringify({name}),
@@ -56,6 +48,15 @@ export class AddFolder extends Component {
         })
       this.props.history.push('/')
     }
+
+  validateName() {
+    const name = this.state.name.value.trim();
+    if (name.length === 0) {
+      return "Name is required";
+    } else if (name.length < 3) {
+      return "Name must be at least 3 characters long";
+    }
+  }
 
   render() {
     const nameError = this.validateName();
