@@ -11,20 +11,29 @@ export class AddFolder extends Component {
     super(props)
     this.state = {
       name: {
-        value: ''
+        value: '',
+        touched: false
       },
-      error: null
-    }
+    };
   }
 
+  updateName = (name) => {
+    this.setState({ name: { value: name, touched: true }});
+  };
+
   handleAddFolder(e) {
-    e.preventDefault()
-    const name = this.state.name.value.trim();
-    if (name.length === 0) {
-      this.updateError(name);
-      return;
+    e.preventDefault();
+    const { name } = this.state;
+    console.log("Name " , name.value);
+    
+    validateName() {
+      const name = this.state.name.value.trim();
+      if (name.length === 0) {
+        return "Name is required";
+      } else if (name.length < 3) {
+        return "Name must be at least 3 characters long";
+      }
     }
-      //this.setState({ error: null});
       const options = {
         method: 'POST',
         body: JSON.stringify({name}),
@@ -48,18 +57,9 @@ export class AddFolder extends Component {
       this.props.history.push('/')
     }
 
-  updateName = (name => {
-    this.setState({name: {value:name}});
-  })
-  
-  updateError = (name) => {
-    console.log(name);
-      this.setState({
-         error: "Must contain letters"
-      })
-    }
-
   render() {
+    const nameError = this.validateName();
+
     return (
       <div>
         <h1>Create a folder</h1>
@@ -68,9 +68,18 @@ export class AddFolder extends Component {
           onSubmit={e => this.handleAddFolder(e)}
           >
             <label>Name</label>
-            <input type="text" name="folder-name" id="folder-name" onChange={e => this.updateName(e.target.value)} required />
-            <ValidationError className="error" message={this.state.error}/>
-            <button className="add-folder-button" type="submit">Add folder</button>
+            <input type="text" name="folder-name" id="folder-name" onChange={e => this.updateName(e.target.value)} />
+            {this.state.name.touched && <ValidationError message={nameError} />}
+            
+            <button 
+              className="add-folder-button" 
+              type="submit"
+              disabled={
+                this.validateName()
+              }
+            >
+              Add folder
+            </button>
           </form>
       </div>
     )

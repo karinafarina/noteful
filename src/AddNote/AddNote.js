@@ -73,14 +73,13 @@ export class AddNote extends Component {
     this.setState({folderId: {value: folderId}})
   }
 
-  updateNameError = (name) => {
-    console.log(name);
+  updateNameError = () => {
     this.setState({
       titleError: "Must contain letters"
     })
   }
 
-  updateContentError = (content) => {
+  updateContentError = () => {
     this.setState({
       contentError: "Must contain content"
     })
@@ -92,7 +91,7 @@ export class AddNote extends Component {
         <h1>Create a note</h1>
           <form className="add-note" onSubmit={e => this.handleAddNote(e)}>
             <label htmlFor="name">Name</label>
-            <input type="text" name="name" id="add-note-name" onChange={e => this.updateName(e.target.value)} required />
+            <input type="text" name="name" id="add-note-name" onChange={e => this.updateName(e.target.value)} />
             <ValididationError className="error" message={this.state.titleError} />
             <label htmlFor="content">Content</label>
             <input type="text" name="content" id="add-note-content" onChange={e => this.updateContent(e.target.value)} />
