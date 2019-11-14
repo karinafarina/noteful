@@ -11,6 +11,7 @@ class FolderView extends React.Component {
   
   render() {
     const currentNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
+    console.log('current note: ', this.context.notes);
     const currentFolder = this.context.folders.find(folder => currentNote.folderId === folder.id);
     return (
       <div className="folder-view">

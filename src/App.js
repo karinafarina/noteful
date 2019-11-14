@@ -9,6 +9,7 @@ import NoteView from './NoteView/NoteView'
 import FolderView from './FolderView/FolderView';
 import AddFolder from './AddFolder/AddFolder';
 import AddNote from './AddNote/AddNote';
+import EditNote from './EditNote/EditNote';
 import NoteError from './NoteError';
 
 class App extends Component {
@@ -22,7 +23,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    fetch('http://localhost:9090/folders')
+    fetch('http://localhost:8000/api/folders')
       .then(res => {
         if (!res.ok) {
           // get the error message from the response,
@@ -34,7 +35,6 @@ class App extends Component {
         return res.json()
       })
       .then(data => {
-        // call the callback when the request is successful
         this.setState({
           folders: data
         })
@@ -42,7 +42,7 @@ class App extends Component {
       .catch(error => {
         console.error(error)
       });
-    fetch('http://localhost:9090/notes')
+    fetch('http://localhost:8000/api/notes')
       .then(res => {
         if (!res.ok) {
           // get the error message from the response,
@@ -58,6 +58,7 @@ class App extends Component {
         this.setState({
           notes: data
         })
+        console.log('notes: ', this.state.notes)
       })
       .catch(error => {
         console.error(error)
@@ -66,9 +67,13 @@ class App extends Component {
 
   render() {
 
-    const getNotesForFolder = (notes = [], folderId) => {
-      let filteredNotes = notes.filter(note => note.folderId === folderId);
-      return !folderId ? notes : filteredNotes;
+    const getNotesForFolder = (notes = [], folder_id) => {
+      let filteredNotes = notes.filter(note => note.folder_id === folder_id);
+      console.log('filtered notes: ', filteredNotes)
+      console.log('notes: ', notes)
+      console.log('folder_id: ', folder_id)
+
+      return !folder_id ? notes : filteredNotes;
     }
 
     const findNote = (notes = [], noteId) =>
@@ -96,7 +101,13 @@ class App extends Component {
       })
     }
 
-    
+    // const updateFolder = () => {
+      
+    // }
+
+    const updateNote = () => {
+
+    }
 
     const contextValue = {
       folders: this.state.folders,
@@ -106,17 +117,19 @@ class App extends Component {
       findNote,
       addFolder,
       addNote,
-      
+      //updateFolder,
+      updateNote,
     }
-    // const findFolder = (folders, folderId) =>
-    //   folders.find(folder => folder.id === folderId)
+    // const findFolder = (folders, folder_id) =>
+    //   folders.find(folder => folder.id === folder_id)
    
     return (
       <main className='App' >
         <Header />
         <div className='main'>
+          {/* add NoteError */}
           <NotesContext.Provider value={contextValue}>
-            {['/', '/folders/:folderId'].map(path => (
+            {['/', '/folders/:folder_id'].map(path => (
               <Route
                 exact
                 key={path}
@@ -136,7 +149,7 @@ class App extends Component {
             component={NoteView}
           />
           {/* Map through these two options, same for both */}
-          {['/', '/folders/:folderId'].map(path => (
+          {['/', '/folders/:folder_id'].map(path => (
             <Route
               exact
               key={path}
@@ -157,6 +170,18 @@ class App extends Component {
               component={AddNote}
             />
           </NoteError>
+            {/* <NoteError>
+              <Route
+                path='/edit-folder/:folder_id'
+                component={EditFolder}
+              />
+            </NoteError> */}
+            <NoteError>
+              <Route
+                path='/edit-note/:noteId'
+                component={EditNote}
+              />
+            </NoteError>
           </NotesContext.Provider>
         </div> 
       </main>

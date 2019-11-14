@@ -10,29 +10,29 @@ export class AddFolder extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: {
+      title: {
         value: '',
         touched: false
       }
     };
   }
 
-  updateName(name) {
-    this.setState({ name: { value: name, touched: true } });
+  updateTitle(title) {
+    this.setState({ title: { value: title, touched: true } });
   }
 
   handleAddFolder(e) {
     e.preventDefault();
-    const name = this.state.name.value;
+    const title = this.state.title.value;
     
     const options = {
       method: 'POST',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify({ title }),
       headers: {
         "content-type": "application/json",
       }
     }
-    fetch('http://localhost:9090/folders', options)
+    fetch('http://localhost:8000/api/folders', options)
       .then(res => {
         if (!res.ok) {
           throw new Error('Something went wrong, please try again later');
@@ -48,17 +48,17 @@ export class AddFolder extends Component {
     this.props.history.push('/')
   }
 
-  validateName() {
-    const name = this.state.name.value.trim();
-    if (name.length === 0) {
-      return "Name is required";
-    } else if (name.length < 3) {
-      return "Name must be at least 3 characters long";
+  validateTitle() {
+    const title = this.state.title.value.trim();
+    if (title.length === 0) {
+      return "Title is required";
+    } else if (title.length < 3) {
+      return "Title must be at least 3 characters long";
     }
   }
 
   render() {
-    const nameError = this.validateName();
+    const titleError = this.validateTitle();
 
     return (
       <div>
@@ -67,16 +67,16 @@ export class AddFolder extends Component {
           className="add-folder-form"
           onSubmit={e => this.handleAddFolder(e)}
           >
-            <label>Name</label>
-            <input type="text" name="folder-name" id="folder-name" onChange={e => this.updateName(e.target.value)} />
-            {this.state.name.touched && (
-              <ValidationError message={nameError} />
+            <label>Title</label>
+          <input type="text" name="folder-title" id="folder-title" onChange={e => this.updateTitle(e.target.value)} />
+            {this.state.title.touched && (
+              <ValidationError message={titleError} />
             )}
             <button 
               className="add-folder-button" 
               type="submit"
               disabled={
-                this.validateName()
+                this.validateTitle()
               }
             >
               Add folder

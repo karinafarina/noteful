@@ -10,7 +10,7 @@ export class AddNote extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      name: {
+      title: {
         value: '',
         touched: false
       },
@@ -18,7 +18,7 @@ export class AddNote extends Component {
         value: '',
         touched: false
       },
-      folderId: {
+      folde_id: {
         value: ''
       },
       titleError: null,
@@ -26,36 +26,36 @@ export class AddNote extends Component {
     }
   }
 
-  updateName(name) {
-    this.setState({ name: { value: name, touched: true } })
+  updatetitle(title) {
+    this.setState({ title: { value: title, touched: true } })
   }
 
   updateContent(content) {
     this.setState({ content: { value: content, touched: true } })
   }
 
-  updateFolderId(folderId) {
-    this.setState({ folderId: { value: folderId } })
+  updatefolder_id(folder_id) {
+    this.setState({ folder_id: { value: folder_id } })
   }
 
   handleAddNote(e) {
     e.preventDefault();
-    const name = this.state.name.value.trim();
+    const title = this.state.title.value.trim();
     const content = this.state.content.value.trim();
-    const folderId = 
-      this.state.folderId.value ? 
-      this.state.folderId.value : 
+    const folder_id = 
+      this.state.folder_id.value ? 
+      this.state.folder_id.value : 
       this.context.folders[0].id;
     const modified = new Date();
     
     const options = {
       method: 'POST',
-      body: JSON.stringify({ name, content, folderId, modified }),
+      body: JSON.stringify({ title, content, folder_id, modified }),
       headers: {
         "content-type": "application/json",
       }
     }
-    fetch('http://localhost:9090/notes', options)
+    fetch('http://localhost:8000/api/notes', options)
     .then(res => {
       if(!res.ok) {
         throw new Error('Something went wrong, please try again later');
@@ -71,12 +71,12 @@ export class AddNote extends Component {
     this.props.history.push('/')
   }
 
-  validateName() {
-    const name = this.state.name.value.trim();
-    if (name.length === 0) {
-      return "Name is required";
-    } else if (name.length < 3) {
-      return "Name must be at least 3 characters long";
+  validatetitle() {
+    const title = this.state.title.value.trim();
+    if (title.length === 0) {
+      return "title is required";
+    } else if (title.length < 3) {
+      return "title must be at least 3 characters long";
     }
   }
 
@@ -90,16 +90,16 @@ export class AddNote extends Component {
   }
 
   render() {
-    const nameError = this.validateName();
+    const titleError = this.validatetitle();
     const contentError = this.validateContent();
     return (
       <div>
         <h1>Create a note</h1>
           <form className="add-note" onSubmit={e => this.handleAddNote(e)}>
-            <label htmlFor="name">Name</label>
-            <input type="text" name="name" id="add-note-name" onChange={e => this.updateName(e.target.value)} />
-            {this.state.name.touched && (
-              <ValidationError message={nameError} />
+            <label htmlFor="title">title</label>
+          <input type="text" name="title" id="add-note-title" onChange={e => this.updateTitle(e.target.value)} />
+          {this.state.title.touched && (
+            <ValidationError message={titleError} />
             )}
             <label htmlFor="content">Content</label>
             <input type="text" name="content" id="add-note-content" onChange={e => this.updateContent(e.target.value)} />
@@ -109,13 +109,13 @@ export class AddNote extends Component {
             <label htmlFor="note-folder-select">Folder</label>
             <select id="note-folder-select" onChange={e => this.updateFolderId(e.target.value)} >
               {this.context.folders.map(folder =>
-                <option key={folder.id} value={folder.id}>{folder.name}</option>
+                <option key={folder.id} value={folder.id}>{folder.title}</option>
               )}            
             </select>
             <button 
               type="submit"
               disabled={
-                nameError ||
+                titleError ||
                 contentError
               }
             >Add note</button>
@@ -126,13 +126,13 @@ export class AddNote extends Component {
 }
 
 AddNote.defaultProps = {
-  name: "",
+  title: "",
   content: "",
-  folderId: 'Important'
+  folder_id: 'Important'
 };
 
 AddNote.propTypes = {
-  name: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
   folder: PropTypes.array
 };

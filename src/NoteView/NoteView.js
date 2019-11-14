@@ -14,7 +14,7 @@ class NoteView extends React.Component {
     e.preventDefault()
     const noteId = this.props.match.params.noteId;
 
-    fetch(`http://localhost:9090/notes/${noteId}`, {
+    fetch(`http://localhost:8000/api/notes/${noteId}`, {
       method: 'DELETE',
       headers: {
         'content-type': 'application/json'
@@ -45,7 +45,7 @@ class NoteView extends React.Component {
         return (
           <section className='note-view'>
             <div className='Note'>
-              <h2 className='Note__title'>{foundNote[0].name}</h2>
+              <h2 className='Note__title'>{foundNote[0].title}</h2>
               <button 
                 className='note-delete' 
                 type='button' 
@@ -54,6 +54,8 @@ class NoteView extends React.Component {
                 <Link to="/">Delete</Link>
                 
               </button>
+              <button type="button" className="edit-note-button"><Link to="/edit-note">Edit Note</Link></button>
+
               <div className='note-dates'>
                 <div className='note-dates-modified'>
                   Modified

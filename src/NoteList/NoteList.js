@@ -9,18 +9,20 @@ function NoteList(props) {
       {(context) => (
         <div className="note-list">
           <ul>
-            {context.getNotesForFolder(context.notes, props.match.params.folderId).map(note =>
+            {JSON.stringify(props.match.params)}
+            {context.getNotesForFolder(context.notes, props.match.params.folder_id).map(note =>
               <li key={note.id}>
                 <div>
                   <Link to={`/notes/${note.id}`}>
-                    {note.name}
+                    {note.title}
                   </Link>
                 </div>
-                <div>{note.modified}</div>
+                <div>{note.date_published}</div>
               </li>
             )}
           </ul>
           <button type="button" className="add-note-button"><Link to="/add-note">+Note</Link></button>
+
         </div>
       )}
     </NotesContext.Consumer>
