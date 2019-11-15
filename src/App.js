@@ -58,7 +58,6 @@ class App extends Component {
         this.setState({
           notes: data
         })
-        console.log('notes: ', this.state.notes)
       })
       .catch(error => {
         console.error(error)
@@ -69,10 +68,6 @@ class App extends Component {
 
     const getNotesForFolder = (notes = [], folder_id) => {
       let filteredNotes = notes.filter(note => note.folder_id === folder_id);
-      console.log('filtered notes: ', filteredNotes)
-      console.log('notes: ', notes)
-      console.log('folder_id: ', folder_id)
-
       return !folder_id ? notes : filteredNotes;
     }
 
@@ -105,7 +100,16 @@ class App extends Component {
       
     // }
 
-    const updateNote = () => {
+    const updateNote = (newNote) => {
+      console.log('noteEdit', newNote)
+      console.log('this.state.notes', this.state.notes)
+      const updatedNote = this.state.notes.map(note => 
+        note.id !== newNote.id ? note : newNote
+      );
+      this.setState({
+        notes: updatedNote
+      })
+      console.log('newnote', newNote)
 
     }
 

@@ -46,11 +46,11 @@ export class AddNote extends Component {
       this.state.folder_id.value ? 
       this.state.folder_id.value : 
       this.context.folders[0].id;
-    const modified = new Date();
+    const date_published = new Date();
     
     const options = {
       method: 'POST',
-      body: JSON.stringify({ title, content, folder_id, modified }),
+      body: JSON.stringify({ title, content, folder_id, date_published }),
       headers: {
         "content-type": "application/json",
       }

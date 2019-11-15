@@ -2,131 +2,182 @@ import React, { Component } from 'react';
 import NotesContext from '../NotesContext';
 import PropTypes from 'prop-types';
 import ValidationError from '../ValidationError';
-
+import './EditNote.css';
 export class EditNote extends Component {
 
   static contextType = NotesContext;
 
-  constructor(props) {
-    super(props)
-    let foundNote = this.context.notes.find(note => {
-      return note.id === this.props.match.params.noteId;
+  state = {
+    apiError: null,
+    id: '',
+    folder_id: '',
+    title: '',
+    content: '',
+    errors: {
+      folder_id: '',
+      title: '',
+      content: ''
+    }
+  }
+
+  //GET NOTE TO BE UPDATED
+  componentDidMount() {
+    const { noteId } = this.props.match.params;
+    fetch(`http://localhost:8000/api/notes/${noteId}`, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+      }
+    })
+      .then(res => {
+        console.log('res', res)
+        if(!res.ok) 
+          return res
+            .json()
+            .then(error => Promise.reject(error));
+        
+        return res.json();
+      })
+      .then(responseData => {
+        console.log('response data', responseData)
+        this.setState({
+          id: responseData.id,
+          title: responseData.title,
+          folder_id: responseData.folder_id,
+          content: responseData.content,
+          //date_published: responseData.date_published
+        });
+      })
+      .catch(error => {
+        this.setState({ apiError: error });
+      });
+  }
+
+  updateErrorCount = () => {
+    let errors = this.state.errors;
+    let count = 0;
+
+    Object.values(errors).forEach(val => {
+      if (val.length > 0) {
+        count++
+      }
     });
-    if(!foundNote) {
-      throw new Error;
-    }
-    this.state = {
-      title: {
-        value: foundNote.title,
-        touched: false
-      },
-      content: {
-        value: foundNote.content,
-        touched: false
-      },
-      folder_id: {
-        value: foundNote.folder_id
-      },
-      titleError: null,
-      contentError: null
-    }
+
+    this.setState({ errorCount: count });
+    let valid = count === 0 ? true : false;
+    this.setState({ formValid: valid });
   }
 
-  updateTitle(title) {
-    this.setState({ title: { value: title, touched: true } })
+  handleUpdateTitle = e => {
+    this.setState({ title: e.target.value })
   }
 
-  updateContent(content) {
-    this.setState({ content: { value: content, touched: true } })
+  handleUpdateContent = e => {
+    this.setState({ content: e.target.value })
   }
 
-  updatefolder_id(folder_id) {
-    this.setState({ folder_id: { value: folder_id } })
+  updatefolderId = e => {
+    this.setState({ folder_id: e.target.value })
   }
 
-  handleEditNote(e) {
+  handleClickCancel = () => {
+    this.props.history.push('/');
+  }
+
+  resetFields = newFields => {
+    this.setState({
+      id: newFields.id || '',
+      title: newFields.title || '',
+      content: newFields.content || '',
+      folder_id: newFields.folder_id || ''
+    });
+  };
+
+  handleEditNote = e => {
     e.preventDefault();
-    const title = this.state.title.value.trim();
-    const content = this.state.content.value.trim();
-    const folder_id =
-      this.state.folder_id.value ?
-        this.state.folder_id.value :
-        this.context.folders[0].id;
-    const modified = new Date();
+
+    //DO NOT SUBMIT FORM IF ANY ERRORS
+    // if(this.state.errorCount > 0) return;
+
+    //GET FORM FIELDS TO BE UPDATED
+    const { noteId } = this.props.match.params;
+
+    const newNote = {
+      id: this.state.id,
+      folder_id: this.state.folder_id,
+      title: this.state.title,
+      content: this.state.content,
+      date_published: new Date()
+    };
+
+    this.setState({ apiError: null });
 
     const options = {
       method: 'PATCH',
-      body: JSON.stringify({ title, content, folder_id, modified }),
+      body: JSON.stringify(newNote),
       headers: {
         "content-type": "application/json",
       }
     }
-    const noteId = this.props.match.params.noteId
-    fetch(`http://localhost:8000/api/notes/:${noteId}`, options)
+    //const noteId = this.props.match.params.noteId
+    fetch(`http://localhost:8000/api/notes/${noteId}`, options)
       .then(res => {
-        if (!res.ok) {
-          throw new Error('Something went wrong, please try again later');
-        }
-        return res.json();
+        if (!res.ok) 
+          return res.json().then(error => Promise.reject(error))
       })
-      .then((note) => {
-        this.context.editNote(note);
+      .then(() => {
+        this.resetFields(newNote);
+        this.context.updateNote(newNote);
+        //return to note folder
+        this.props.history.push(`/folders/${this.state.folder_id}`);
       })
       .catch(error => {
         console.error(error)
-      })
-    this.props.history.push('/')
-  }
-
-  // validateName() {
-  //   const name = this.state.name.value.trim();
-  //   if (name.length === 0) {
-  //     return "Name is required";
-  //   } else if (name.length < 3) {
-  //     return "Name must be at least 3 characters long";
-  //   }
-  // }
-
-  // validateContent() {
-  //   const content = this.state.content.value.trim();
-  //   if (content.length === 0) {
-  //     return "Content is required";
-  //   } else if (content.length < 3) {
-  //     return "Content must be at least 3 characters long";
-  //   }
-  // }
-
-  render() {
+        this.setState({ apiError: error })
+      });
     
-    const titleError = this.validateTitle();
-    const contentError = this.validateContent();
+  };
+
+  
+  render() {
+    const { title, folder_id, content } = this.state
+    // const titleError = this.validateTitle();
+    // const contentError = this.validateContent();
     return (
       <div>
         <h1>Edit a note</h1>
-        <form className="edit-note" onSubmit={e => this.handleEditNote(e)}>
+        <form className="edit-note" onSubmit={this.handleEditNote}>
           <label htmlFor="title">Title</label>
-          <input type="text" name="title" id="edti-note-title" onChange={e => this.updateTitle(e.target.value)} />
-          {this.state.title.touched && (
+          <input 
+            type="text" 
+            name="title" 
+            id="title" 
+            value={title}
+            onChange={this.handleUpdateTitle}
+           />
+          {/* {this.state.title.touched && (
             <ValidationError message={titleError} />
-          )}
+          )} */}
           <label htmlFor="content">Content</label>
-          <input type="text" name="content" id="edit-note-content" onChange={e => this.updateContent(e.target.value)} />
-          {this.state.content.touched && (
+          <input 
+            type="text" 
+            name="content" 
+            id="edit-note-content" 
+            value={content}
+            onChange={this.handleUpdateContent} 
+          />
+          {/* {this.state.content.touched && (
             <ValidationError message={contentError} />
-          )}
+          )} */}
           <label htmlFor="note-folder-select">Folder</label>
-          <select id="note-folder-select" onChange={e => this.updatefolder_id(e.target.value)} >
+          <select id="note-folder-select" onChange={this.updateFolderId} >
             {this.context.folders.map(folder =>
-              <option key={folder.id} value={folder.id}>{folder.title}</option>
+              <option key={folder.id} value={folder_id}>{folder.title}</option>
             )}
           </select>
-          <button
-            type="submit"
-            disabled={
-              titleError ||
-              contentError
-            }
-          >Edit note</button>
+          <button type='button' onClick={this.handleClickCancel}>Cancel</button>
+          {' '}
+          <button type="submit">Save</button>
         </form>
       </div>
     )
@@ -142,7 +193,7 @@ EditNote.defaultProps = {
 EditNote.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
-  folder: PropTypes.array
+  folder_id: PropTypes.array
 };
 
 export default EditNote;

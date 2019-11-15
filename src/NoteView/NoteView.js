@@ -37,10 +37,14 @@ class NoteView extends React.Component {
         console.error(error)
       })
     }
+    
   render() {
+    console.log('this.props', this.props)
     let foundNote = this.context.notes.filter(note => {
-      return note.id === this.props.match.params.noteId;
+      return note.id === parseInt(this.props.match.params.noteId);
     });
+    console.log('foundNote', this.context.notes.filter(note => {
+      return note.id === parseInt(this.props.match.params.noteId)}))
       if(foundNote.length) {
         return (
           <section className='note-view'>
@@ -54,13 +58,18 @@ class NoteView extends React.Component {
                 <Link to="/">Delete</Link>
                 
               </button>
-              <button type="button" className="edit-note-button"><Link to="/edit-note">Edit Note</Link></button>
+              
+              <button 
+                type="button" 
+                className="edit-note-button">
+                  <Link to={`/edit-note/${this.props.match.params.noteId}`}>Edit Note</Link>
+              </button>
 
               <div className='note-dates'>
                 <div className='note-dates-modified'>
                   Modified
                   <span className='Date'>
-                    {format(foundNote[0].modified, 'DD MMM YYYY')}
+                    {format(foundNote[0].date_published, 'DD MMM YYYY')}
                   </span>
                 </div>
               </div>

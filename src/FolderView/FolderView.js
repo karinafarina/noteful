@@ -10,15 +10,14 @@ class FolderView extends React.Component {
   };
   
   render() {
-    const currentNote = this.context.notes.find(note => note.id === this.props.match.params.noteId);
-    console.log('current note: ', this.context.notes);
+    const currentNote = this.context.notes.find(note => note.id === 20);
     const currentFolder = this.context.folders.find(folder => currentNote.folderId === folder.id);
     return (
       <div className="folder-view">
         <button type="button" onClick={this.handleBackButton}>Back</button>
             {currentFolder && (
               <h3 className='folder-view-name'>
-                {currentFolder.name}
+                {currentFolder.title}
               </h3>
             )}
           </div>
