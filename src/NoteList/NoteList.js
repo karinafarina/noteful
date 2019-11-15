@@ -9,14 +9,14 @@ function NoteList(props) {
       {(context) => (
         <div className="note-list">
           <ul>
-            {context.getNotesForFolder(context.notes, (parseInt(props.match.params.folder_id))).map(note =>
+            {context.getNotesForFolder(context.notes, parseInt(props.match.params.folder_id)).map(note =>
               <li key={note.id}>
                 <div>
                   <Link to={`/notes/${note.id}`}>
                     {note.title}
                   </Link>
                 </div>
-                <div>{note.date_published}</div>
+                <div>{note.date_published.toLocaleString()}</div>
               </li>
             )}
           </ul>
