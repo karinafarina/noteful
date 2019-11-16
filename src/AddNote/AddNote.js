@@ -18,7 +18,7 @@ export class AddNote extends Component {
         value: '',
         touched: false
       },
-      folde_id: {
+      folder_id: {
         value: ''
       },
       titleError: null,
@@ -26,7 +26,7 @@ export class AddNote extends Component {
     }
   }
 
-  updatetitle(title) {
+  updateTitle(title) {
     this.setState({ title: { value: title, touched: true } })
   }
 
@@ -34,20 +34,17 @@ export class AddNote extends Component {
     this.setState({ content: { value: content, touched: true } })
   }
 
-  updatefolder_id(folder_id) {
-    this.setState({ folder_id: { value: folder_id } })
+  updateFolderId = e => {
+    console.log('e.tartet', e.target.value)
+    this.setState({ folder_id: e.target.value })
   }
 
-  handleAddNote(e) {
+  handleAddNote = e => {
     e.preventDefault();
     const title = this.state.title.value.trim();
     const content = this.state.content.value.trim();
-    const folder_id = 
-      this.state.folder_id.value ? 
-      this.state.folder_id.value : 
-      this.context.folders[0].id;
+    const folder_id = this.state.folder_id;
     const date_published = new Date();
-    
     const options = {
       method: 'POST',
       body: JSON.stringify({ title, content, folder_id, date_published }),
@@ -71,7 +68,7 @@ export class AddNote extends Component {
     this.props.history.push('/')
   }
 
-  validatetitle() {
+  validateTitle() {
     const title = this.state.title.value.trim();
     if (title.length === 0) {
       return "title is required";
@@ -90,13 +87,13 @@ export class AddNote extends Component {
   }
 
   render() {
-    const titleError = this.validatetitle();
+    const titleError = this.validateTitle();
     const contentError = this.validateContent();
     return (
       <div>
         <h1>Create a note</h1>
-          <form className="add-note" onSubmit={e => this.handleAddNote(e)}>
-            <label htmlFor="title">title</label>
+          <form className="add-note" onSubmit={this.handleAddNote}>
+            <label htmlFor="title">Title</label>
           <input type="text" name="title" id="add-note-title" onChange={e => this.updateTitle(e.target.value)} />
           {this.state.title.touched && (
             <ValidationError message={titleError} />
@@ -107,7 +104,7 @@ export class AddNote extends Component {
               <ValidationError message={contentError} />
             )}
             <label htmlFor="note-folder-select">Folder</label>
-            <select id="note-folder-select" onChange={e => this.updateFolderId(e.target.value)} >
+            <select id="note-folder-select" onChange={this.updateFolderId} >
               {this.context.folders.map(folder =>
                 <option key={folder.id} value={folder.id}>{folder.title}</option>
               )}            
@@ -134,7 +131,6 @@ AddNote.defaultProps = {
 AddNote.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
-  folder: PropTypes.array
 };
 
 export default AddNote;

@@ -50,6 +50,11 @@ class NoteView extends React.Component {
           <section className='note-view'>
             <div className='Note'>
               <h2 className='Note__title'>{foundNote[0].title}</h2>
+              <div className='note-content'>
+                {foundNote[0].content.split(/\n \r|\n/).map((para, i) =>
+                  <p key={i}>{para}</p>
+                )}
+              </div>
               <button 
                 className='note-delete' 
                 type='button' 
@@ -68,17 +73,13 @@ class NoteView extends React.Component {
               <div className='note-dates'>
                 <div className='note-dates-modified'>
                   Modified
-                  <span className='Date'>
+                  <span className='Date'>&nbsp;
                     {format(foundNote[0].date_published, 'DD MMM YYYY')}
                   </span>
                 </div>
               </div>
             </div>
-            <div className='note-content'>
-              {foundNote[0].content.split(/\n \r|\n/).map((para, i) =>
-                <p key={i}>{para}</p>
-              )}
-            </div>
+            
           </section>
       )
     } else {

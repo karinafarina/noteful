@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import NotesContext from '../NotesContext';
+import { format } from 'date-fns';
 import './NoteList.css';
 
 function NoteList(props) {
+  
+  
   return (
     <NotesContext.Consumer>
       {(context) => (
@@ -16,7 +19,7 @@ function NoteList(props) {
                     {note.title}
                   </Link>
                 </div>
-                <div>{note.date_published.toLocaleString()}</div>
+                <div>{format(note.date_published, 'DD MMM YYYY')}</div>
               </li>
             )}
           </ul>

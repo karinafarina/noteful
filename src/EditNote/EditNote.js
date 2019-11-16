@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import NotesContext from '../NotesContext';
 import PropTypes from 'prop-types';
-import ValidationError from '../ValidationError';
 import './EditNote.css';
 export class EditNote extends Component {
 
@@ -23,6 +22,7 @@ export class EditNote extends Component {
   //GET NOTE TO BE UPDATED
   componentDidMount() {
     const { noteId } = this.props.match.params;
+    console.log('noteId is: ', noteId);
     fetch(`http://localhost:8000/api/notes/${noteId}`, {
       method: 'GET',
       headers: {
@@ -97,7 +97,7 @@ export class EditNote extends Component {
     e.preventDefault();
 
     //DO NOT SUBMIT FORM IF ANY ERRORS
-    // if(this.state.errorCount > 0) return;
+    if(this.state.errorCount > 0) return;
 
     //GET FORM FIELDS TO BE UPDATED
     const { noteId } = this.props.match.params;
@@ -175,9 +175,10 @@ export class EditNote extends Component {
               <option key={folder.id} value={folder_id}>{folder.title}</option>
             )}
           </select>
-          <button type='button' onClick={this.handleClickCancel}>Cancel</button>
           {' '}
           <button type="submit">Save</button>
+          {' '}
+          <button type='button' onClick={this.handleClickCancel}>Cancel</button>
         </form>
       </div>
     )
@@ -193,7 +194,7 @@ EditNote.defaultProps = {
 EditNote.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
-  folder_id: PropTypes.array
+  folder_id: PropTypes.number
 };
 
 export default EditNote;
