@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Route } from 'react-router-dom';
 import NotesContext from './NotesContext';
 import Header from './Header/Header';
+import config from './config';
 import './App.css';
 import FolderList from './FolderList/FolderList';
 import NoteList from './NoteList/NoteList';
@@ -23,7 +24,12 @@ class App extends Component {
   };
 
   componentDidMount() {
-    fetch('http://localhost:8000/api/folders')
+    fetch(config.FOLDERS_API_ENDPOINT, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json'
+      }
+    })
       .then(res => {
         if (!res.ok) {
           // get the error message from the response,
@@ -42,7 +48,12 @@ class App extends Component {
       .catch(error => {
         console.error(error)
       });
-    fetch('http://localhost:8000/api/notes')
+    fetch(config.NOTES_API_ENDPOINT, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json'
+        }
+      })
       .then(res => {
         if (!res.ok) {
           // get the error message from the response,

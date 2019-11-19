@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import NotesContext from '../NotesContext';
 import PropTypes from 'prop-types';
 import ValidationError from '../ValidationError';
+import config from '../config'
 
 export class AddFolder extends Component {
 
@@ -32,7 +33,7 @@ export class AddFolder extends Component {
         "content-type": "application/json",
       }
     }
-    fetch('http://localhost:8000/api/folders', options)
+    fetch(config.FOLDERS_API_ENDPOINT, options)
       .then(res => {
         if (!res.ok) {
           throw new Error('Something went wrong, please try again later');
